@@ -1,7 +1,7 @@
 # OfficeKeyVerify
 检测Office绑定密钥是否有效
 
-# httpwebrequest实现
+#httpwebrequest实现
 
 #支持绑定未被绑定的office密钥
 
