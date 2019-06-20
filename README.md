@@ -7,4 +7,6 @@
 
 #支持批量检测
 
-#![image](https://github.com/laomms/OfficeKeyVerify/blob/master/psb.png)
+#支持显示已绑定的密钥
+
+![image](https://github.com/laomms/OfficeKeyVerify/blob/master/psb.png)
