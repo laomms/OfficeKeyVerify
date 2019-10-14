@@ -9,4 +9,4 @@
 
 #支持显示已绑定的密钥
 
-![image](https://github.com/laomms/OfficeKeyVerify/blob/master/psb.png)
+![image](https://github.com/laomms/OfficeKeyVerify/blob/master/office1PC.png)
