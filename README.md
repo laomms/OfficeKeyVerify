@@ -13,4 +13,4 @@
 
 #支持下载office软件
 
-![image](https://github.com/laomms/OfficeKeyVerify/blob/master/office1PC.png)
+![image](https://github.com/laomms/OfficeKeyVerify/blob/master/1pc.gif)
