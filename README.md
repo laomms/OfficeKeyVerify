@@ -205,7 +205,7 @@
                 metaInformation.Add(m.Groups[1].Value, m.Groups[2].Value);
                 if (m.Groups[1].Value == "ms.ctid")
                 {
-                    CorrelationId = m.Groups[2].Value;  ////获取CorrelationId
+                    CorrelationId = m.Groups[2].Value;  ////获取登陆成功后的CorrelationId
                     break;
                 }
             }
