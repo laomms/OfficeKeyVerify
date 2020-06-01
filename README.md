@@ -197,7 +197,7 @@
             //登录成功  mycookiecontainer可以用于其他步骤
             var postdata5 = "wbids=" + wbids + "&pprid=" + pprid + "&wbid=" + wbid + "&NAP=" + NAP + "&=" + ANON + "&t=" + t;
             var ResponseString5 = RequestPost(url5, headaccept, contentype, url4, head1, postdata5, mycookiecontainer, out redirect_posturl);
-            //正则出meta标签内容
+            //正则出meta标签内容,因为里面含有CorrelationId
             Regex metaTag = new Regex(@"<meta[\s]+[^>]*?name[\s]?=[\s""']+(.*?)[\s""']+content[\s]?=[\s""']+(.*?)[""']+.*?>");
             Dictionary<string, string> metaInformation = new Dictionary<string, string>();
             foreach (Match m in metaTag.Matches(ResponseString5))
@@ -205,7 +205,7 @@
                 metaInformation.Add(m.Groups[1].Value, m.Groups[2].Value);
                 if (m.Groups[1].Value == "ms.ctid")
                 {
-                    CorrelationId = m.Groups[2].Value;
+                    CorrelationId = m.Groups[2].Value;  ////获取CorrelationId
                     break;
                 }
             }
