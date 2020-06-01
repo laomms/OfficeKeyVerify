@@ -66,11 +66,11 @@
                     JToken token = JObject.Parse(match.Value);
                     if (token.SelectToken("$.Bq") != null)
                     {
-                        url3 = (string)token.SelectToken("$.Bq");   //获取下一步的跳转链接
+                        url3 = (string)token.SelectToken("$.Bq");   //下一步的跳转链接,post验证参数
                     }
                     if (token.SelectToken("$.urlPost") != null)
                     {
-                        url4 = (string)token.SelectToken("$.urlPost");
+                        url4 = (string)token.SelectToken("$.urlPost");     //登录跳转
                     }
                     if (token.SelectToken("$.correlationId") != null)
                     {
@@ -118,7 +118,7 @@
                 }
 
             }
-            //登录的各个必要参数
+            //按登录按钮后需要验证的各个必要参数
             var ANON = "";
             var pprid = "";
             var wbids = "";
@@ -148,7 +148,7 @@
                 var ResponseString3 = RequestPost(url3, "application/json", "application/json; charset=UTF-8", url2, head3, postdata3, mycookiecontainer, out redirect_posturl);
 
             }
-            //登录
+            //提交邮箱和密码并登录
             var postdata4 = "i13=0&login=" + HttpUtility.UrlEncode(txtBox1) + "&loginfmt=" + HttpUtility.UrlEncode(txtBox1) + "&type=11&LoginOptions=3&lrt=&lrtPartition=&hisRegion=&hisScaleUnit=&passwd=" + HttpUtility.UrlEncode(txtBox2) + "&ps=2&psRNGCDefaultType=&psRNGCEntropy=&psRNGCSLK=&canary=&ctx=&hpgrequestid=&PPFT=" + flowToken + "&PPSX=Passpo&NewUser=1&FoundMSAs=&fspost=1&i21=0&CookieDisclosure=0&IsFidoSupported=0&i2=6&i17=0&i18=&i19=78649";
             var ResponseString4 = RequestPost(url4, headaccept, contentype, url3, head1, postdata4, mycookiecontainer, out redirect_posturl);
 
