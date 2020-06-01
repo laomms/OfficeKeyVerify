@@ -160,11 +160,11 @@
                 {
                     if (formNode.Name == "form")
                     {
-                        url5 = formNode.GetAttributeValue("action", "");     //获取下一步的跳转链接
+                        url5 = formNode.GetAttributeValue("action", "");     //获取下一步的跳转链接,登录后验证各个参数的地址
                         break;
                     }
                 }
-                //获取登录成功的各个必要参数值
+                //获取登录成功所需各个必要参数值
                 foreach (HtmlNode input in htmldocument4.DocumentNode.SelectNodes("//input"))
                 {
                     if (input.GetAttributeValue("name", "") == "wbids")
@@ -194,7 +194,7 @@
                 this.Invoke(new UpdateMyDelegatedelegate(UpdateMessage), "账号或密码错误!");
                 return;
             }            
-            //登录成功  mycookiecontainer可以用于其他步骤
+            //登录  mycookiecontainer可以用于其他步骤
             var postdata5 = "wbids=" + wbids + "&pprid=" + pprid + "&wbid=" + wbid + "&NAP=" + NAP + "&=" + ANON + "&t=" + t;
             var ResponseString5 = RequestPost(url5, headaccept, contentype, url4, head1, postdata5, mycookiecontainer, out redirect_posturl);
             //正则出meta标签内容,因为里面含有CorrelationId
