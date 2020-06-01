@@ -99,7 +99,7 @@
                 {
                 }
             }
-
+           //取cookie集中的ip地址备用其他步骤验证
             var table = (Hashtable)mycookiecontainer.GetType().InvokeMember("m_domainTable", BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance,null, mycookiecontainer, null);
             foreach (var key in table.Keys)
             {
