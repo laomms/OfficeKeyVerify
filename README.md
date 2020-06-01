@@ -57,7 +57,7 @@
             var url3 = "";
             var url4 = "";
             var uaid = "";
-            //正则json格式,获取各个参数及跳转链接
+            //在返回的网页中正则出json格式,获取各个参数及跳转链接
             MatchCollection match2 = Regex.Matches(HttpUtility.HtmlDecode(HttpUtility.UrlDecode(ResponseString2)), @"\{(?:[^\{\}]|(?<o>\{)|(?<-o>\}))+(?(o)(?!))\}", RegexOptions.Multiline | RegexOptions.IgnoreCase);
             foreach (Match match in match2)
             {
@@ -194,7 +194,7 @@
                 this.Invoke(new UpdateMyDelegatedelegate(UpdateMessage), "账号或密码错误!");
                 return;
             }            
-            //登录成功  mycookiecontainer存储登录成功的cookie,用于其他步骤
+            //登录成功  mycookiecontainer可以用于其他步骤
             var postdata5 = "wbids=" + wbids + "&pprid=" + pprid + "&wbid=" + wbid + "&NAP=" + NAP + "&=" + ANON + "&t=" + t;
             var ResponseString5 = RequestPost(url5, headaccept, contentype, url4, head1, postdata5, mycookiecontainer, out redirect_posturl);
             Regex metaTag = new Regex(@"<meta[\s]+[^>]*?name[\s]?=[\s""']+(.*?)[\s""']+content[\s]?=[\s""']+(.*?)[""']+.*?>");
