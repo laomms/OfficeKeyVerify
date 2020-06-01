@@ -211,3 +211,148 @@
             }
             this.Invoke(new UpdateMyDelegatedelegate(UpdateMessage),"登录成功!");
 ```
+
+
+```c
+static string RequestGet(string url, string headeraccept, string contentype, string referer, WebHeaderCollection heard, CookieContainer cookieContainers, out string redirecturl)
+        {
+            if (url == "")
+            {
+                redirecturl="";
+                return "";
+            }
+            ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol |SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            ServicePointManager.DefaultConnectionLimit = 50;
+
+            string RedirectUrl = string.Empty;
+            var domain = (string)Regex.Match(url, @"^(?:\w+://)?([^/?]*)").Groups[1].Value;
+            if (domain.Contains("www.") == true)
+            {
+                domain = domain.Replace("www.", "");
+            }
+            else
+            {
+                domain = "." + domain;
+            }
+            var myRequest = (HttpWebRequest)WebRequest.Create(url);
+            myRequest.Headers = heard;
+            myRequest.Method = "GET";
+            myRequest.Accept = headeraccept;
+            myRequest.ContentType = contentype;
+            myRequest.Referer = referer;
+            myRequest.AllowAutoRedirect = false;
+            myRequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 UBrowser/6.2.4098.3 Safari/537.36";
+            myRequest.CookieContainer = cookieContainers;   
+
+            string results = "";
+            try
+            {
+                using (HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse())
+                {
+                    if (myResponse.ContentEncoding.ToLower().Contains("gzip"))
+                    {
+                        results = (new StreamReader(new System.IO.Compression.GZipStream(myResponse.GetResponseStream(), System.IO.Compression.CompressionMode.Decompress))).ReadToEnd();
+                    }
+                    else if (myResponse.ContentEncoding.ToLower().Contains("deflate"))
+                    {
+                        results = (new StreamReader(new System.IO.Compression.DeflateStream(myResponse.GetResponseStream(), System.IO.Compression.CompressionMode.Decompress), Encoding.UTF8)).ReadToEnd();
+                    }
+                    else
+                    {
+                        results = (new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8)).ReadToEnd();
+                    }
+                    if (myResponse.Headers["Location"] != null)
+                    {
+                        RedirectUrl = myResponse.Headers["Location"];
+                    }
+                    CookieCollection cookiesheader = HttpCookieExtension.GetAllCookiesFromHeader(myResponse.Headers[HttpResponseHeader.SetCookie], domain);
+                    cookieContainers.Add(cookiesheader);
+                }                 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            redirecturl = RedirectUrl;
+            return results;
+        }
+
+        static string RequestPost(string url, string headeraccept, string contentype, string referer, WebHeaderCollection heard, string postdata, CookieContainer cookieContainers, out string redirecturl)
+        {
+            if (url == "")
+            {
+                redirecturl = "";
+                return "";
+            }
+            ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
+            ServicePointManager.DefaultConnectionLimit = 50;
+            string RedirectUrl = string.Empty;
+            var domain = (string)Regex.Match(url, @"^(?:\w+://)?([^/?]*)").Groups[1].Value;
+            if (domain.Contains("www.") == true)
+            {
+                domain = domain.Replace("www.", "");
+            }
+            else
+            {
+                domain = "." + domain;
+            }
+            var myRequest = (HttpWebRequest)WebRequest.Create(url);
+            var data = Encoding.UTF8.GetBytes(postdata);
+            myRequest.Headers = heard;
+            myRequest.Method = "POST";
+            myRequest.KeepAlive = true;
+            myRequest.Accept = headeraccept;
+            myRequest.ContentType = contentype;
+            myRequest.Referer = referer;
+            myRequest.AllowAutoRedirect = false;
+            myRequest.Headers.Add("Upgrade-Insecure-szRequests", "1");
+            myRequest.Headers.Add("Cache-Control", "max-age=0");
+            myRequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 UBrowser/6.2.4098.3 Safari/537.36";
+            myRequest.CookieContainer = cookieContainers;
+            myRequest.ContentLength = data.Length;
+            using (var stream = myRequest.GetRequestStream())
+            {
+                stream.Write(data, 0, data.Length);
+            }
+
+            string results = "";
+            try
+            {
+                using (HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse())
+                {
+                    if (myResponse.ContentEncoding.ToLower().Contains("gzip"))
+                    {
+                        results = (new StreamReader(new System.IO.Compression.GZipStream(myResponse.GetResponseStream(), System.IO.Compression.CompressionMode.Decompress), Encoding.UTF8)).ReadToEnd();
+                    }
+                    else if (myResponse.ContentEncoding.ToLower().Contains("deflate"))
+                    {
+                        results = (new StreamReader(new System.IO.Compression.DeflateStream(myResponse.GetResponseStream(), System.IO.Compression.CompressionMode.Decompress))).ReadToEnd();
+                    }
+                    else
+                    {
+                        results = (new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8)).ReadToEnd();
+                    }
+
+                    if (myResponse.Headers["Location"] != null)
+                    {
+                        RedirectUrl = myResponse.Headers["Location"];
+                    }
+                    CookieCollection cookiesheader = HttpCookieExtension.GetAllCookiesFromHeader(myResponse.Headers[HttpResponseHeader.SetCookie], domain);
+                    cookieContainers.Add(cookiesheader);
+                }                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            redirecturl = RedirectUrl;
+            return results;
+        }
+        public static bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
+        }
+```
